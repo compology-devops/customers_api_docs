@@ -1,8 +1,686 @@
 FORMAT: 1A
-HOST: http://customers-api.compology.com/v2/
+HOST: http://customers-api.compology.com/v1/
 
 
 # Compology Customers API
 
-**VERSION 2 (v2) IN DEVELOPMENT **
+**VERSION 1 (v1) FOR RELEASE**
 
+The Compology Customers and Locations Read/Write API allows you to query
+and create data about your customers and their service locations.
+
+The API is based on REST principles, making it conform to industry-standard
+approaches, and making it easy to implement and test clients. You can use
+**curl** to test URLs and you can use any programming language to interact
+with the API.
+
+Use cases of this API include (but are not limited to):
+
+ * Getting a list of customers
+ * Getting a list of service locations for a specific customer
+ * Adding a service location
+ * Deleting a service location
+ 
+ 
+## Using Apiary.io interactive docs
+
+This document is hosted on Apiary.io. To see endpoints and example responses,
+click on the "200 OK" buttons. This will open a panel showing more details.
+
+The button labeled "Try console" is not supported at this time.
+
+## Terminology
+
+For the purposes of this API `compology customer id` and `compology location id`
+refer to Compology's internal identifiers for specific entities.  The terms
+`external customer id`, `externalCustomerId`, `external location id`, and
+`externalLocationId` refer to the API user's identifiers for specific entities.
+
+## Authentication
+API access will be supported only via HTTPS.
+
+Users of this API will receive a JWT token. When a client makes a request to
+the API, this token shall be included in the `Authorization` header.
+
+The header shall be formatted thusly: `Bearer <your token>`.
+
+## Rate limiting
+Excessive requests to this API will be denied via rate limiting.
+
+## Error handling
+
+### 200s
+Successes will be HTTP responses with status codes between 200-299.
+
+### 400s
+Client errors will be indicated by HTTP responses with status codes
+between 400-499.
+
+This level of error will be accompanied by an HTTP body containing JSON
+data with descriptive information about the error.
+
+### 500s
+Server-side or network errors will be indicated by HTTP responses with
+status codes between 500-599.
+
+
+## Customers [/customers]
+
+### List all customers [GET]
+
+Return a list of customers ordered by the date they were created.
+The list is paginated, with 100 records per page.
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -H "$AUTH" ${BASE}/customers?page=0
+```
+
++ Parameters
+ + page (number, optional)
+ 
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "customers": [
+                {
+                  "id": "b7361111-1111-1111-1111-189e0d09cbfd",
+                  "externalCrmId": "1234",
+                  "organizationId": "dragndropwaste",
+                  "name": "All American Recycling",
+                  "createdAt": "2018-05-02T23:01:33.702Z",
+                  "updatedAt": "2019-08-08T18:09:35.087Z",
+                  "billingStreet": "123 Main Street",
+                  "billingCity": "Austin",
+                  "billingState": "TX",
+                  "billingZip": "90210",
+                  "contactFullName": "John Johnson",
+                  "contactPhone": "555-555-5551",
+                  "email": "john@example.com",
+                  "isActive": true,
+                  "billingCountry": "US",
+                  "associatedUserEmail": null
+                },
+                {
+                  "id": "fea41111-1111-1111-1111-143b9d7ff3ba",
+                  "externalCrmId": null,
+                  "organizationId": "dragndropwaste",
+                  "name": "Budget Homes",
+                  "createdAt": "2018-05-02T23:05:56.760Z",
+                  "updatedAt": "2018-05-02T23:05:56.760Z",
+                  "billingStreet": "",
+                  "billingCity": "",
+                  "billingState": "",
+                  "billingZip": "",
+                  "contactFullName": "",
+                  "contactPhone": "",
+                  "email": "",
+                  "isActive": true,
+                  "billingCountry": "",
+                  "associatedUserEmail": null
+                },
+                {
+                  "id": "9dd91111-1111-1111-1111-3f437c6d6a22",
+                  "externalCrmId": "C-123",
+                  "organizationId": "dragndropwaste",
+                  "name": "Dan's Debris",
+                  "createdAt": "2018-05-02T23:09:42.221Z",
+                  "updatedAt": "2019-08-08T18:18:30.597Z",
+                  "billingStreet": "123 Debris St",
+                  "billingCity": "Austin",
+                  "billingState": "TX",
+                  "billingZip": "70210",
+                  "contactFullName": "Dan Donut",
+                  "contactPhone": "555-555-5555",
+                  "email": "dan@example.com",
+                  "isActive": true,
+                  "billingCountry": "US",
+                  "associatedUserEmail": null
+                },
+                {
+                  "id": "50c41111-1111-1111-1111-789ad9c00a78",
+                  "externalCrmId": null,
+                  "organizationId": "dragndropwaste",
+                  "name": "Earl's Electrical",
+                  "createdAt": "2018-05-03T18:47:39.594Z",
+                  "updatedAt": "2018-05-03T18:47:39.594Z",
+                  "billingStreet": "",
+                  "billingCity": "",
+                  "billingState": "",
+                  "billingZip": "",
+                  "contactFullName": "",
+                  "contactPhone": "",
+                  "email": "",
+                  "isActive": true,
+                  "billingCountry": "",
+                  "associatedUserEmail": null
+                },
+                {
+                  "id": "688f1111-1111-1111-1111-adcf55452f6c",
+                  "externalCrmId": "abc123",
+                  "organizationId": "dragndropwaste",
+                  "name": "Alicia Marie Fricazee",
+                  "createdAt": "2018-08-08T17:54:25.672Z",
+                  "updatedAt": "2019-07-26T18:52:52.329Z",
+                  "billingStreet": null,
+                  "billingCity": null,
+                  "billingState": null,
+                  "billingZip": null,
+                  "contactFullName": null,
+                  "contactPhone": null,
+                  "email": null,
+                  "isActive": true,
+                  "billingCountry": null,
+                  "associatedUserEmail": "alicia+3@example.com"
+                }
+              ]
+            }
+            
+
+### Add one new customer [POST]
+
+This POST endpoint accepts a JSON object containing information about the new customer.
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X POST -H "$AUTH" ${BASE}/customers -d "name=foo" -d "externalCustomerId=ABC098" -d "billingStreet=123 Bar St" -d "contactFullName=John Doe"
+```
+
++ Parameters
+ + name (string)
+ + externalCustomerId (string) - Must be unique
+ + billingStreet (string, optional)
+ + billingCity (string, optional)
+ + billingState (string, optional)
+ + billingPostcode (string, optional)
+ + contactEmail (string, optional)
+ + contactFullName (string, optional)
+ + contactPhone (string, optional)
+ + associatedUserEmail (string, optional) - An email address of an active user
+
++ Response 201 (application/json)
+
+    + Headers
+    
+            Location: (URL to new Customer)
+
+    + Body
+            {
+              "name": "foo",
+              "organizationId": "dragndropwaste",
+              "billingStreet": "123 Bar St",
+              "externalCrmId": "ABC098",
+              "contactFullName": "John Doe",
+              "updatedAt": "2019-08-08T18:50:48.088Z",
+              "createdAt": "2019-08-08T18:50:48.088Z",
+              "id": "6b271111-1111-1111-1111-df80205796a3",
+              "associatedUserEmail": null
+            }
+
+### Update one customer [PUT]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X PUT -H "$AUTH" ${BASE}/customers -d "name=foo" -d "externalCustomerId=ABC098" -d "contactFullName=John W. Doe"
+```
+
++ Parameters
+ + name (string)
+ + externalCustomerId (string) - Must match an existing customer
+ + billingStreet (string, optional)
+ + billingCity (string, optional)
+ + billingState (string, optional)
+ + billingPostcode (string, optional)
+ + contactEmail (string, optional)
+ + contactFullName (string, optional)
+ + contactPhone (string, optional)
+ + associatedUserEmail (string, optional) - An email address of an active user
+ 
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "id": "6b271111-1111-1111-1111-df80205796a3",
+              "externalCrmId": "ABC099",
+              "organizationId": "dragndropwaste",
+              "name": "foo",
+              "createdAt": "2019-08-08T18:50:48.088Z",
+              "updatedAt": "2019-08-08T19:06:24.321Z",
+              "billingStreet": "123 Bar St",
+              "billingCity": null,
+              "billingState": null,
+              "billingZip": null,
+              "contactFullName": "John W. Doe",
+              "contactPhone": null,
+              "email": null,
+              "isActive": true,
+              "billingCountry": null,
+              "associatedUserEmail": null
+            }
+
+
+
+            
+## Customer by external ID [/customers/e/{externalCustomerId}]
+
+### Get customer  [GET]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -H "$AUTH" ${BASE}/customers/e/C-123
+```
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "id": "9dd91111-1111-1111-1111-3f437c6d6a22",
+              "externalCrmId": "C-123",
+              "organizationId": "dragndropwaste",
+              "name": "Dan's Debris",
+              "createdAt": "2018-05-02T23:09:42.221Z",
+              "updatedAt": "2019-08-08T18:24:23.572Z",
+              "billingStreet": "123 Debris St",
+              "billingCity": "Austin",
+              "billingState": "TX",
+              "billingZip": "70210",
+              "contactFullName": "Dan Donut",
+              "contactPhone": "555-555-5555",
+              "email": "dan@example.com",
+              "isActive": true,
+              "billingCountry": "US",
+              "associatedUserEmail": null
+            }
+
+### Update one customer [PUT]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X PUT -H "$AUTH" ${BASE}/customers/e/ABC098 -d "name=foo" -d "contactFullName=John Q. Doe"
+```
+
++ Parameters
+ + name (string)
+ + externalCustomerId (string) - Must match an existing customer
+ + billingStreet (string, optional)
+ + billingCity (string, optional)
+ + billingState (string, optional)
+ + billingPostcode (string, optional)
+ + contactEmail (string, optional)
+ + contactFullName (string, optional)
+ + contactPhone (string, optional)
+ + associatedUserEmail (string, optional) - An email address of an active user
+ 
++ Response 200 (application/json)
+
+    + Body
+            {
+              "id": "6b271111-1111-1111-1111-df80205796a3",
+              "externalCrmId": "ABC098",
+              "organizationId": "dragndropwaste",
+              "name": "foo",
+              "createdAt": "2019-08-08T18:50:48.088Z",
+              "updatedAt": "2019-08-08T19:59:20.463Z",
+              "billingStreet": "123 Bar St",
+              "billingCity": null,
+              "billingState": null,
+              "billingZip": null,
+              "contactFullName": "John Q. Doe",
+              "contactPhone": null,
+              "email": null,
+              "isActive": true,
+              "billingCountry": null,
+              "associatedUserEmail": null
+            }
+            
+### Delete one customer [DELETE]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X DELETE -H "$AUTH" ${BASE}/customers/e/ABC098
+```
+
++ Response 200 (application/json)
+
+
+## Locations [/locations]
+
+### List all locations  [GET]
+
+Return a list of service locations ordered by the date they were created.
+The list is paginated, with 100 records per page.
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -H "$AUTH" ${BASE}/locations
+```
+
++ Parameters
+ + page (number, optional)
+ 
++ Response 200 (application/json)
+
+  + Body
+
+            {
+              "locations": [
+                {
+                  "id": "c3fe1111-1111-1111-1111-5b57aeb9fb31",
+                  "externalCrmId": null,
+                  "externalId": null,
+                  "organization": "dragndropwaste",
+                  "customerId": null,
+                  "type": "bin_depot",
+                  "description": "Drag N Drop Yard",
+                  "street": "13825 Fm 2769 Rd",
+                  "city": "Austin",
+                  "state": "Texas",
+                  "zip": "78726",
+                  "postalCode": "78726",
+                  "country": null,
+                  "lat": 30.44039015,
+                  "lon": -97.87260805,
+                  "radius": 150,
+                  "contactFullName": "Yan Mollard",
+                  "contactPhone": "(617) 555-5555",
+                  "internationalizedContactPhone": "+16175555555",
+                  "contactEmail": "alicia@example.compology.us",
+                  "recentMessageRecipient": null,
+                  "isAutogenerated": false,
+                  "createdAt": "2018-05-02T22:53:44.694Z",
+                  "updatedAt": "2019-06-30T15:29:09.379Z",
+                  "deactivatedAt": null,
+                  "numContainersOnSite": 0
+                },
+                {
+                  "id": "a8b11111-1111-1111-1111-2206c314019e",
+                  "externalCrmId": null,
+                  "externalId": null,
+                  "organization": "dragndropwaste",
+                  "customerId": "b7361111-1111-1111-1111-189e0d09cbfd",
+                  "type": "onsite",
+                  "description": "Alicia's Yacht Home",
+                  "street": "73 Tehama Street, #B",
+                  "city": "San Francisco",
+                  "state": "CA",
+                  "zip": "94103",
+                  "postalCode": "94103",
+                  "country": null,
+                  "lat": 30.4320139042726,
+                  "lon": -97.8961250000053,
+                  "radius": 50,
+                  "contactFullName": "Alicia Sedlock",
+                  "contactPhone": "(617) 555-5555",
+                  "internationalizedContactPhone": "+16175555555",
+                  "contactEmail": "aliciasedlock@example.com",
+                  "recentMessageRecipient": null,
+                  "isAutogenerated": false,
+                  "createdAt": "2018-08-01T22:52:55.016Z",
+                  "updatedAt": "2018-08-01T22:52:55.016Z",
+                  "deactivatedAt": null,
+                  "numContainersOnSite": 0
+                },
+                {
+                  "id": "0efc1111-1111-1111-1111-e1bb476e94ce",
+                  "externalCrmId": null,
+                  "externalId": null,
+                  "organization": "dragndropwaste",
+                  "customerId": "0d861111-1111-1111-1111-c7869067739c",
+                  "type": "onsite",
+                  "description": "Test",
+                  "street": "Morgan Hill Drive",
+                  "city": "Dripping Springs",
+                  "state": "Texas",
+                  "zip": "78620",
+                  "postalCode": "78620",
+                  "country": null,
+                  "lat": 30.2135945463876,
+                  "lon": -98.1068340000018,
+                  "radius": 50,
+                  "contactFullName": "Eric",
+                  "contactPhone": "",
+                  "internationalizedContactPhone": null,
+                  "contactEmail": "",
+                  "recentMessageRecipient": null,
+                  "isAutogenerated": false,
+                  "createdAt": "2018-08-02T03:24:26.449Z",
+                  "updatedAt": "2018-08-02T03:36:02.200Z",
+                  "deactivatedAt": null,
+                  "numContainersOnSite": 0
+                }
+              ]
+            }
+
+### Add one new location  [POST]
+
+This POST endpoint accepts a JSON object containing information about the new service location.
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X POST -H "$AUTH" ${BASE}/locations -d "externalCustomerId=ABC099" -d "externalLocationId=ABC099-01"
+```
+
++ Parameters
+ + description (string, optional)
+ + externalCustomerId (string) - Must reference an existing customer
+ + externalLocationId (string) - Must be unique
+ + street (string, optional)
+ + city (string, optional)
+ + state (string, optional)
+ + zip (string, optional)
+ + contactEmail (string, optional)
+ + contactFullName (string, optional)
+ + contactPhone (string, optional)
+ + lat (number, optional) - Must be a valid latitude
+ + lon (number, optional) - Must be a valid longitude
+ + radius (number, optional) - Must be between 30 and 999
+ 
+
++ Response 201 (application/json)
+
+    + Headers
+    
+            Location: (URL to new Location)
+
+    + Body
+
+            {
+              "customerId": "6b271111-1111-1111-1111-df80205796a3",
+              "organization": "dragndropwaste",
+              "description": null,
+              "street": null,
+              "city": null,
+              "state": null,
+              "zip": null,
+              "lat": null,
+              "lon": null,
+              "type": "onsite",
+              "radius": 50,
+              "externalCrmId": "ABC099-01",
+              "contactEmail": null,
+              "contactFullName": null,
+              "contactPhone": null,
+              "updatedAt": "2019-08-08T21:32:46.830Z",
+              "createdAt": "2019-08-08T21:32:46.830Z",
+              "id": "28191111-1111-1111-1111-886273882d3d",
+              "deactivatedAt": null,
+              "recentMessageRecipient": null,
+              "country": null,
+              "internationalizedContactPhone": null,
+              "isAutogenerated": false
+            }
+
+### Update one location  [PUT]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X PUT -H "$AUTH" ${BASE}/locations -d "externalCustomerId=ABC099" -d "externalLocationId=ABC099-01" -d "description=New 01"
+```
+
++ Parameters
+ + description (string, optional)
+ + externalCustomerId (string) - Must reference an existing customer
+ + externalLocationId (string) - Must identify the location to update
+ + street (string, optional)
+ + city (string, optional)
+ + state (string, optional)
+ + zip (string, optional)
+ + contactEmail (string, optional)
+ + contactFullName (string, optional)
+ + contactPhone (string, optional)
+ + lat (number, optional) - Must be a valid latitude. Ignored if Compology has automatically adjusted the position
+ + lon (number, optional) - Must be a valid longitude. Ignored if Compology has automatically adjusted the position
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "id": "ac3d1111-1111-1111-1111-9f6c831e7ddf",
+              "organization": "dragndropwaste",
+              "description": "New 01",
+              "lat": null,
+              "lon": null,
+              "type": "onsite",
+              "radius": 50,
+              "createdAt": "2019-08-08T21:20:46.607Z",
+              "updatedAt": "2019-08-08T21:35:25.242Z",
+              "customerId": "6b271111-1111-1111-1111-df80205796a3",
+              "externalCrmId": "ABC099-01",
+              "deactivatedAt": null,
+              "recentMessageRecipient": null,
+              "country": null,
+              "internationalizedContactPhone": null,
+              "isAutogenerated": false
+            }
+
+
+## Location by external ID [/locations/e/{externalId}]
+
+### Get location  [GET]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X GET -H "$AUTH" ${BASE}/locations/e/F10-10
+```
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "id": "7d261111-1111-1111-1111-5c4663240681",
+              "externalCrmId": "F10-10",
+              "externalId": "F10-10",
+              "organization": "dragndropwaste",
+              "customerId": "9dd91111-1111-1111-1111-3f437c6d6a22",
+              "type": "onsite",
+              "description": "Feline Factory",
+              "street": "Cat Mountain Drive",
+              "city": "Austin",
+              "state": "Texas",
+              "zip": "78731",
+              "postalCode": "78731",
+              "country": null,
+              "lat": 30.35487,
+              "lon": -97.7790,
+              "radius": 50,
+              "contactFullName": "Kitty",
+              "contactPhone": "",
+              "internationalizedContactPhone": null,
+              "contactEmail": "purr@example.com",
+              "recentMessageRecipient": null,
+              "isAutogenerated": false,
+              "createdAt": "2019-08-08T18:13:33.017Z",
+              "updatedAt": "2019-08-08T18:13:33.017Z",
+              "deactivatedAt": null,
+              "numContainersOnSite": 1,
+              "containersOnSite": [
+                "DRAGNDROPWASTE_00011"
+              ]
+            }
+
+
+### Update one location  [PUT]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X PUT -H "$AUTH" ${BASE}/locations/e/F10-10 -d "contactFullName=Kitty Pryde" -d "externalCustomerId=C-123" -d "externalLocationId=F10-10"
+```
+
++ Parameters
+ + description (string, optional)
+ + externalCustomerId (string) - Must reference an existing customer
+ + externalLocationId (string) - Must identify the location to update
+ + street (string, optional)
+ + city (string, optional)
+ + state (string, optional)
+ + zip (string, optional)
+ + contactEmail (string, optional)
+ + contactFullName (string, optional)
+ + contactPhone (string, optional)
+ + lat (number, optional) - Must be a valid latitude. Ignored if Compology has automatically adjusted the position
+ + lon (number, optional) - Must be a valid longitude. Ignored if Compology has automatically adjusted the position
+
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "id": "7d261111-1111-1111-1111-5c4663240681",
+              "organization": "dragndropwaste",
+              "lat": 30.3548713606698,
+              "lon": -97.7790599999998,
+              "type": "onsite",
+              "radius": 50,
+              "createdAt": "2019-08-08T18:13:33.017Z",
+              "updatedAt": "2019-08-08T21:44:52.199Z",
+              "customerId": "9dd91111-1111-1111-1111-3f437c6d6a22",
+              "externalCrmId": "F10-10",
+              "contactFullName": "Kitty Pryde",
+              "deactivatedAt": null,
+              "recentMessageRecipient": null,
+              "country": null,
+              "internationalizedContactPhone": null,
+              "isAutogenerated": false
+            }
+
+
+### Delete one location  [DELETE]
+
+#### example
+```bash
+export BASE=https://customers-api.compology.com/v1
+export AUTH="Authorization: Bearer <your auth token>"
+curl -v -X DELETE -H "$AUTH" ${BASE}/locations/e/F10-10
+```
+
++ Response 200 (application/json)

@@ -45,7 +45,18 @@ the API, this token shall be included in the `Authorization` header.
 The header shall be formatted thusly: `Bearer <your token>`.
 
 ## Rate limiting
-Excessive requests to this API will be denied via rate limiting.
+Compology's current rate limiting policy is `50` requests every `30` seconds. 
+Higher than this will result in rate limiting. 
+
+All requests return headers similar to these:
+```
+'retry-after': '300', 
+'x-ratelimit-limit': '50',
+'x-ratelimit-remaining': '0',
+'x-ratelimit-reset': 'Mon, 02 Dec 2019 23:50:07 GMT'
+```
+
+If your application requires higher limits than these, please contact support. 
 
 ## Error handling
 
